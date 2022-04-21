@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
+        fontFamily: 'Roboto',
       ),
       home: MyHomePage(),
     );
@@ -65,12 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title), actions: [
-        IconButton(
-          onPressed: () => startAddNewTransaction(context),
-          icon: Icon(Icons.add_box_outlined),
-        ),
-      ]),
+      appBar: AppBar(
+        title: Text(title, style: TextStyle(fontFamily: 'Roboto')),
+        actions: [
+          IconButton(
+            onPressed: () => startAddNewTransaction(context),
+            icon: Icon(Icons.add_box_outlined),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
