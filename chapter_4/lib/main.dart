@@ -62,6 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void deleteAllTransaction() {
+    setState(() {
+      transactions.removeRange(0, transactions.length);
+    });
+  }
+
   void startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
@@ -79,7 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title, style: TextStyle(fontFamily: 'Roboto')),
+        title: Text(title,
+            style:
+                TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w700)),
         actions: [
           IconButton(
             onPressed: () => startAddNewTransaction(context),
@@ -87,18 +95,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Chart(listTransactions: _recentTransactions),
-            TransactionList(transactions: transactions),
-          ],
-        ),
+      body: Column(
+        children: [
+          Chart(listTransactions: _recentTransactions),
+          TransactionList(transactions: transactions),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add_circle_sharp),
-        onPressed: () => startAddNewTransaction(context),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            child: Icon(Icons.add_circle_sharp),
+            onPressed: () => startAddNewTransaction(context),
+          ),
+          FloatingActionButton(
+            child: Icon(Icons.remove_circle_sharp),
+            onPressed: deleteAllTransaction,
+          ),
+        ],
       ),
     );
   }
