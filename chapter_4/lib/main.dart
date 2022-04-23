@@ -1,9 +1,11 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, avoid_print
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, avoid_print, unused_import
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import './widgets/transaction_list.dart';
 import './widgets/transaction_input.dart';
 import './models/transaction.dart';
+import './widgets/chart.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,6 +37,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final String title = 'Expense App';
   List<Transaction> transactions = [];
+
+  List<Transaction> get _recentTransactions {
+    return transactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   void updateTransactions(titleController, amountController) {
     try {
@@ -78,16 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              child: const Card(
-                child: Center(
-                  child: Text('Element 1'),
-                ),
-                color: Colors.grey,
-                elevation: 5,
-              ),
-            ),
+            Chart(listTransactions: _recentTransactions),
             TransactionList(transactions: transactions),
           ],
         ),

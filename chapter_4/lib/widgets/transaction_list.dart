@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use, avoid_print, must_be_immutable
+
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
@@ -10,50 +11,66 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Card(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      child: transactions.isEmpty
+          ? Column(
               children: [
-                Container(
-                  margin: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      style: BorderStyle.solid,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                  child: Text(
-                    '${transactions[index].amount.round()} VND',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                Text(
+                  'NO TRANSACTION YET !!!',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      transactions[index].title,
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 250,
+                  child: Image.asset(
+                    'assets/images/pngegg.png',
+                    fit: BoxFit.cover,
+                  ),
+                )
+              ],
+            )
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  elevation: 5,
+                  child: ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          style: BorderStyle.solid,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        '${transactions[index].amount.round()} VNĐ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
-                    Text(DateFormat().format(transactions[index].date)),
-                  ],
-                ),
-              ],
+                    title: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        transactions[index].title,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    subtitle: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(DateFormat().format(transactions[index].date),
+                          style: Theme.of(context).textTheme.bodyMedium),
+                    ),
+                  ),
+                );
+              },
+              itemCount: transactions.length,
             ),
-          );
-        },
-        itemCount: transactions.length,
-      ),
     );
   }
 }
