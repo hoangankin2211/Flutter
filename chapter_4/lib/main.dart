@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        primaryColor: Colors.blueGrey,
         primarySwatch: Colors.blueGrey,
         fontFamily: 'Roboto',
       ),
@@ -48,14 +49,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void updateTransactions(titleController, amountController) {
+  void updateTransactions(titleController, amountController, selectedDate) {
     try {
       setState(() {
         transactions.add(Transaction(
             id: (transactions.length + 1).toString(),
             title: titleController.text,
             amount: double.parse(amountController.text),
-            date: DateTime.now()));
+            date: selectedDate));
       });
     } on FormatException catch (e) {
       print('Error: $e');
@@ -65,6 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void deleteAllTransaction() {
     setState(() {
       transactions.removeRange(0, transactions.length);
+    });
+  }
+
+  void deleteSingleTransaction(Transaction deleteElement) {
+    setState(() {
+      transactions.removeWhere((element) => element == deleteElement);
     });
   }
 
@@ -98,18 +105,26 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           Chart(listTransactions: _recentTransactions),
-          TransactionList(transactions: transactions),
+          Expanded(
+            child: TransactionList(
+              transactions: transactions,
+              deleteSingleElement: deleteSingleTransaction,
+            ),
+          ),
         ],
       ),
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            child: Icon(Icons.add_circle_sharp),
-            onPressed: () => startAddNewTransaction(context),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: FloatingActionButton(
+              child: Icon(Icons.add_circle_sharp),
+              onPressed: () => startAddNewTransaction(context),
+            ),
           ),
           FloatingActionButton(
-            child: Icon(Icons.remove_circle_sharp),
+            child: Icon(Icons.clear_rounded),
             onPressed: deleteAllTransaction,
           ),
         ],

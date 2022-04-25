@@ -6,11 +6,13 @@ import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   List<Transaction> transactions;
-  TransactionList({Key? key, required this.transactions}) : super(key: key);
+  Function(Transaction) deleteSingleElement;
+  TransactionList(
+      {Key? key, required this.transactions, required this.deleteSingleElement})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -32,43 +34,44 @@ class TransactionList extends StatelessWidget {
             )
           : ListView.builder(
               itemBuilder: (context, index) {
-                return FlatButton(
-                  onPressed: () {},
-                  child: Card(
-                    margin: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                    elevation: 5,
-                    child: ListTile(
-                      leading: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        padding: EdgeInsets.all(5),
-                        child: Text(
-                          '${transactions[index].amount.round()} VNĐ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                return Card(
+                  margin: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  elevation: 5,
+                  child: ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          style: BorderStyle.solid,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
-                      title: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          transactions[index].title,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        '${transactions[index].amount.round()} VNĐ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
-                      subtitle: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                            DateFormat().format(transactions[index].date),
-                            style: Theme.of(context).textTheme.bodyMedium),
+                    ),
+                    title: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        transactions[index].title,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
+                    ),
+                    subtitle: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                          DateFormat.yMd().format(transactions[index].date),
+                          style: Theme.of(context).textTheme.bodyMedium),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () => deleteSingleElement(transactions[index]),
+                      icon: Icon(Icons.delete),
                     ),
                   ),
                 );

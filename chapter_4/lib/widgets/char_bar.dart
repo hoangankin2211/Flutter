@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_brace_in_string_interps, sized_box_for_whitespace
-
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
