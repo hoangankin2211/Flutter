@@ -37,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final String title = 'Expense App';
+
   List<Transaction> transactions = [];
 
   List<Transaction> get _recentTransactions {
@@ -88,29 +89,55 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  bool _showChart = false;
+
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text(title,
+          style: TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w700)),
+      actions: [
+        IconButton(
+          onPressed: () => startAddNewTransaction(context),
+          icon: Icon(Icons.add_box_outlined),
+        ),
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title,
-            style:
-                TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w700)),
-        actions: [
-          IconButton(
-            onPressed: () => startAddNewTransaction(context),
-            icon: Icon(Icons.add_box_outlined),
-          ),
-        ],
-      ),
+      appBar: appBar,
       body: Column(
         children: [
-          Chart(listTransactions: _recentTransactions),
-          Expanded(
-            child: TransactionList(
-              transactions: transactions,
-              deleteSingleElement: deleteSingleTransaction,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Show chart'),
+              Switch(
+                  value: _showChart,
+                  onChanged: (val) {
+                    setState(() {
+                      _showChart = val;
+                    });
+                  }),
+            ],
           ),
+          _showChart
+              ? Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height) *
+                      0.25,
+                  child: Chart(
+                    listTransactions: _recentTransactions,
+                  ),
+                )
+              : Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height) *
+                      0.75,
+                  child: TransactionList(
+                    transactions: transactions,
+                    deleteSingleElement: deleteSingleTransaction,
+                  ),
+                ),
         ],
       ),
       floatingActionButton: Row(

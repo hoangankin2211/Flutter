@@ -49,47 +49,58 @@ class _TransactionInputState extends State<TransactionInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            autofocus: true,
-            decoration: InputDecoration(labelText: 'Title'),
-            controller: titleController,
-            onSubmitted: (_) => addTrans,
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
           ),
-          TextField(
-            decoration: InputDecoration(labelText: 'Amount'),
-            controller: amountController,
-            onSubmitted: (_) => addTrans,
-          ),
-          SizedBox(
-            height: 50,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(selectedDate == null
-                      ? 'NO DATE CHOSEN!'
-                      : DateFormat.yMd().format(selectedDate)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                autofocus: true,
+                decoration: InputDecoration(labelText: 'Title'),
+                controller: titleController,
+                onSubmitted: (_) => addTrans,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Amount'),
+                controller: amountController,
+                onSubmitted: (_) => addTrans,
+              ),
+              SizedBox(
+                height: 50,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(selectedDate == null
+                          ? 'NO DATE CHOSEN!'
+                          : DateFormat.yMd().format(selectedDate)),
+                    ),
+                    FlatButton(
+                      onPressed: () => _presentDateChosen(context),
+                      child: Text('CHOSE DATE',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                  ],
                 ),
-                FlatButton(
-                  onPressed: () => _presentDateChosen(context),
-                  child: Text('CHOSE DATE',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
-              ],
-            ),
+              ),
+              FlatButton(
+                textColor: Colors.white,
+                color: Theme.of(context).primaryColor,
+                onPressed: () => addTrans(context),
+                child: Text('Add new transaction'),
+              )
+            ],
           ),
-          FlatButton(
-            textColor: Colors.white,
-            color: Theme.of(context).primaryColor,
-            onPressed: () => addTrans(context),
-            child: Text('Add new transaction'),
-          )
-        ],
+        ),
       ),
     );
   }
