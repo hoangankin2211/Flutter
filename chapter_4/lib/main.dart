@@ -1,7 +1,4 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, avoid_print, unused_import
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import './widgets/transaction_list.dart';
 import './widgets/transaction_input.dart';
 import './models/transaction.dart';
@@ -23,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
         fontFamily: 'Roboto',
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -44,20 +41,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return transactions.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
   }
 
-  void updateTransactions(titleController, amountController, selectedDate) {
+  void updateTransactions(
+      titleController, amountController, selectedDate, createDate) {
     try {
       setState(() {
-        transactions.add(Transaction(
+        transactions.add(
+          Transaction(
             id: (transactions.length + 1).toString(),
             title: titleController.text,
             amount: double.parse(amountController.text),
-            date: selectedDate));
+            date: selectedDate,
+            createDate: createDate,
+          ),
+        );
       });
     } on FormatException catch (e) {
       print('Error: $e');
@@ -93,13 +95,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation ==
+        Orientation.landscape; //check landscape
     final appBar = AppBar(
       title: Text(title,
-          style: TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w700)),
+          style: const TextStyle(
+              fontFamily: 'Roboto', fontWeight: FontWeight.w700)),
       actions: [
         IconButton(
           onPressed: () => startAddNewTransaction(context),
-          icon: Icon(Icons.add_box_outlined),
+          icon: const Icon(Icons.add_box_outlined),
         ),
       ],
     );
@@ -110,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Show chart'),
+              const Text('Show chart'),
               Switch(
                   value: _showChart,
                   onChanged: (val) {
@@ -120,38 +125,42 @@ class _MyHomePageState extends State<MyHomePage> {
                   }),
             ],
           ),
-          _showChart
-              ? Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height) *
-                      0.25,
-                  child: Chart(
-                    listTransactions: _recentTransactions,
-                  ),
-                )
-              : Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height) *
-                      0.75,
-                  child: TransactionList(
-                    transactions: transactions,
-                    deleteSingleElement: deleteSingleTransaction,
-                  ),
-                ),
+          if (_showChart)
+            SizedBox(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height) *
+                  0.25,
+              child: Chart(
+                listTransactions: _recentTransactions,
+              ),
+            ),
+          SizedBox(
+            height: _showChart
+                ? (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height) *
+                    0.65
+                : (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height) -
+                    40,
+            child: TransactionList(
+              transactions: transactions,
+              deleteSingleElement: deleteSingleTransaction,
+            ),
+          ),
         ],
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             child: FloatingActionButton(
-              child: Icon(Icons.add_circle_sharp),
+              child: const Icon(Icons.add_circle_sharp),
               onPressed: () => startAddNewTransaction(context),
             ),
           ),
           FloatingActionButton(
-            child: Icon(Icons.clear_rounded),
+            child: const Icon(Icons.clear_rounded),
             onPressed: deleteAllTransaction,
           ),
         ],

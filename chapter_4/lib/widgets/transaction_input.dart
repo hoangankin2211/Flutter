@@ -1,11 +1,12 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, avoid_print, prefer_typing_uninitialized_variables, prefer_const_literals_to_create_immutables
+// ignore_for_file: avoid_init_to_null
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TransactionInput extends StatefulWidget {
-  final Function(TextEditingController, TextEditingController, DateTime)
+  final Function(
+          TextEditingController, TextEditingController, DateTime, DateTime)
       updateTransaction;
-  TransactionInput({Key? key, required this.updateTransaction})
+  const TransactionInput({Key? key, required this.updateTransaction})
       : super(key: key);
 
   @override
@@ -19,6 +20,8 @@ class _TransactionInputState extends State<TransactionInput> {
 
   var selectedDate = null;
 
+  var createDate = null;
+
   void addTrans(BuildContext context) {
     if (titleController.text.isEmpty ||
         double.parse(amountController.text) <= 0 ||
@@ -26,7 +29,8 @@ class _TransactionInputState extends State<TransactionInput> {
       return;
     }
 
-    widget.updateTransaction(titleController, amountController, selectedDate);
+    widget.updateTransaction(
+        titleController, amountController, selectedDate, createDate);
 
     Navigator.of(context).pop();
   }
@@ -42,9 +46,16 @@ class _TransactionInputState extends State<TransactionInput> {
 
       setState(() {
         selectedDate = pickedDate;
+        createDate = DateTime.now();
       });
       return;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -64,12 +75,12 @@ class _TransactionInputState extends State<TransactionInput> {
             children: [
               TextField(
                 autofocus: true,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 controller: titleController,
                 onSubmitted: (_) => addTrans,
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 controller: amountController,
                 onSubmitted: (_) => addTrans,
               ),
@@ -82,9 +93,9 @@ class _TransactionInputState extends State<TransactionInput> {
                           ? 'NO DATE CHOSEN!'
                           : DateFormat.yMd().format(selectedDate)),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () => _presentDateChosen(context),
-                      child: Text('CHOSE DATE',
+                      child: const Text('CHOSE DATE',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           )),
@@ -92,11 +103,12 @@ class _TransactionInputState extends State<TransactionInput> {
                   ],
                 ),
               ),
-              FlatButton(
-                textColor: Colors.white,
-                color: Theme.of(context).primaryColor,
+              TextButton(
                 onPressed: () => addTrans(context),
-                child: Text('Add new transaction'),
+                child: Text(
+                  'Add new transaction',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
               )
             ],
           ),

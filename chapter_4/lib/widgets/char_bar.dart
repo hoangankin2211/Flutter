@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_brace_in_string_interps, sized_box_for_whitespace
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
@@ -24,7 +23,7 @@ class ChartBar extends StatelessWidget {
                 child: FittedBox(
                     child: Text(spendingAmount.toStringAsFixed(0)))), //Amount
             SizedBox(height: constraints.maxHeight * 0.05),
-            Container(
+            SizedBox(
               //Chart
               height: constraints.maxHeight * 0.6,
               width: 9,
@@ -52,10 +51,10 @@ class ChartBar extends StatelessWidget {
             SizedBox(
               height: constraints.maxHeight * 0.05,
             ),
-            Container(
+            SizedBox(
               height: constraints.maxHeight * 0.15,
               child: Text(label),
-            ), //Day
+            ),
           ],
         );
       }),

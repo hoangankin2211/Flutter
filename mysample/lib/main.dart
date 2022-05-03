@@ -24,19 +24,13 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: FractionallySizedBox(
-        widthFactor: 0.5,
-        heightFactor: 0.5,
-        alignment: FractionalOffset.center,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.blue,
-              width: 4,
-            ),
-          ),
-        ),
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Column(
+        children: [
+          Text('test1'),
+          Text('Test2'),
+        ],
       ),
     );
   }

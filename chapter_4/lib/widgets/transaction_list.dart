@@ -1,15 +1,26 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, avoid_print, must_be_immutable
-
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
-import 'package:intl/intl.dart';
+import './transaction_detail.dart';
+import './transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
-  List<Transaction> transactions;
-  Function(Transaction) deleteSingleElement;
-  TransactionList(
+  final List<Transaction> transactions;
+  final Function(Transaction) deleteSingleElement;
+  const TransactionList(
       {Key? key, required this.transactions, required this.deleteSingleElement})
       : super(key: key);
+
+  void showDetailTransaction(BuildContext context, Transaction transaction) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return Dialog(
+          child: TransactionDetail(transaction: transaction),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -18,7 +29,7 @@ class TransactionList extends StatelessWidget {
           child: transactions.isEmpty
               ? Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: constraints.maxHeight * 0.1,
                       child: Text(
                         'NO TRANSACTION YET !!!',
@@ -28,7 +39,7 @@ class TransactionList extends StatelessWidget {
                     SizedBox(
                       height: constraints.maxHeight * 0.1,
                     ),
-                    Container(
+                    SizedBox(
                       height: constraints.maxHeight * 0.7,
                       child: Image.asset(
                         'assets/images/pngegg.png',
@@ -39,48 +50,9 @@ class TransactionList extends StatelessWidget {
                 )
               : ListView.builder(
                   itemBuilder: (context, index) {
-                    return Card(
-                      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                      elevation: 5,
-                      child: ListTile(
-                        leading: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              style: BorderStyle.solid,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            '${transactions[index].amount.round()} VNĐ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                        title: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            transactions[index].title,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ),
-                        subtitle: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                              DateFormat.yMd().format(transactions[index].date),
-                              style: Theme.of(context).textTheme.bodyMedium),
-                        ),
-                        trailing: IconButton(
-                          onPressed: () =>
-                              deleteSingleElement(transactions[index]),
-                          icon: Icon(Icons.delete),
-                        ),
-                      ),
-                    );
+                    return TransactionItem(
+                        deleteSingleElement: deleteSingleElement,
+                        transaction: transactions[index]);
                   },
                   itemCount: transactions.length,
                 ),
