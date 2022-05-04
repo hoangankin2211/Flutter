@@ -26,7 +26,7 @@ class TransactionItem extends StatelessWidget {
     return TextButton(
       onPressed: () => showDetailTransaction(context, transaction),
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 6),
         elevation: 5,
         child: ListTile(
           leading: Container(

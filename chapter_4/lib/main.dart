@@ -138,10 +138,10 @@ class _MyHomePageState extends State<MyHomePage> {
             height: _showChart
                 ? (MediaQuery.of(context).size.height -
                         appBar.preferredSize.height) *
-                    0.65
+                    0.5
                 : (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height) -
-                    40,
+                        appBar.preferredSize.height) *
+                    0.75,
             child: TransactionList(
               transactions: transactions,
               deleteSingleElement: deleteSingleTransaction,
