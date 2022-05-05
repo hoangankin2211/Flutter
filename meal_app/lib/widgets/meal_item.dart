@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meal_app/models/meal.dart';
+import 'package:meal_app/screens/meal_item_detail_screen.dart';
 import '../models/meal.dart';
 
 class MealItem extends StatelessWidget {
-  static final routeName = '/meal_detai_screen';
-
   final Meal meal;
   const MealItem({Key? key, required this.meal}) : super(key: key);
 
@@ -35,7 +34,8 @@ class MealItem extends StatelessWidget {
   }
 
   void selectMeal(BuildContext context) {
-    Navigator.of(context).pushNamed(routeName, arguments: meal);
+    Navigator.of(context)
+        .pushNamed(MealItemDetailScreen.routeName, arguments: meal);
   }
 
   @override
