@@ -2,22 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:meal_app/widgets/meal_item.dart';
 import '../models/category.dart';
 import '../dummy_data.dart';
+import '../models/meal.dart';
 
-class CategoriesMealScreen extends StatelessWidget {
+class CategoriesMealScreen extends StatefulWidget {
   static const routeName = '/categories-meal-screen';
 
   const CategoriesMealScreen({Key? key}) : super(key: key);
 
   @override
+  State<CategoriesMealScreen> createState() => _CategoriesMealScreenState();
+}
+
+class _CategoriesMealScreenState extends State<CategoriesMealScreen> {
+  late final Category category;
+  late final List<Meal> meals;
+  bool _isLoadedList = false;
+  void _removeItem(String id) {
+    setState(() {
+      meals.removeWhere((element) => element.id == id);
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isLoadedList) {
+      category = ModalRoute.of(context)?.settings.arguments as Category;
+      meals = dummyMeal
+          .where((element) => element.categories.contains(category.id))
+          .toList();
+      _isLoadedList = true;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final routeArgument =
-        ModalRoute.of(context)?.settings.arguments as Category;
-    final Category category = routeArgument;
-    final categoryMeals = dummyMeal.where(
-      (element) {
-        return element.categories.contains(category.id);
-      },
-    ).toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -29,9 +48,12 @@ class CategoriesMealScreen extends StatelessWidget {
       body: Center(
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return MealItem(meal: categoryMeals[index]);
+            return MealItem(
+              meal: meals[index],
+              removeItem: _removeItem,
+            );
           },
-          itemCount: categoryMeals.length,
+          itemCount: meals.length,
         ),
       ),
     );

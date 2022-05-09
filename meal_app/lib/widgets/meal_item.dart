@@ -5,7 +5,9 @@ import '../models/meal.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
-  const MealItem({Key? key, required this.meal}) : super(key: key);
+  final Function(String) removeItem;
+  const MealItem({Key? key, required this.meal, required this.removeItem})
+      : super(key: key);
 
   String? get complexityText {
     switch (meal.complexity) {
@@ -35,7 +37,12 @@ class MealItem extends StatelessWidget {
 
   void selectMeal(BuildContext context) {
     Navigator.of(context)
-        .pushNamed(MealItemDetailScreen.routeName, arguments: meal);
+        .pushNamed(MealItemDetailScreen.routeName, arguments: meal)
+        .then(
+      (value) {
+        if (value != null) removeItem(meal.id);
+      },
+    );
   }
 
   @override
@@ -85,37 +92,53 @@ class MealItem extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.schedule),
-                        const SizedBox(width: 2),
-                        Text(
-                          '${meal.duration} min',
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: constraints.maxWidth * 0.3,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.schedule),
+                            Text(
+                              '${meal.duration} min',
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.schedule),
-                        const SizedBox(width: 2),
-                        Text(
-                          '$affordabilityText',
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: constraints.maxWidth * 0.4,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.schedule,
+                            ),
+                            Text(
+                              '$affordabilityText',
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.schedule),
-                        const SizedBox(width: 2),
-                        Text(
-                          '$complexityText',
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: constraints.maxWidth * 0.3,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.schedule),
+                            Text(
+                              '$complexityText',
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ]),
+                      ),
+                    ],
+                  );
+                },
+              ),
             )
           ],
         ),

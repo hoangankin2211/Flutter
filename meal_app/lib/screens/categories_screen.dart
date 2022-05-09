@@ -3,6 +3,7 @@ import '../dummy_data.dart';
 import '../widgets/categories_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
+  static const String routeName = '/categories-screens';
   const CategoriesScreen({Key? key}) : super(key: key);
 
   @override

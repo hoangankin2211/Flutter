@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './categories_screen.dart';
 import './favorites_screen.dart';
+import '../widgets/main_drawer.dart';
+import '../models/meal.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
@@ -18,7 +20,7 @@ class _TabsScreenState extends State<TabsScreen> {
     },
     {
       'title': 'Favorites',
-      'widget': const FavoritesScreen(),
+      'widget': () => FavoritesScreen(),
       'icon': const Icon(Icons.star),
     },
   ];
@@ -38,6 +40,7 @@ class _TabsScreenState extends State<TabsScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text('MealApp'),
       ),
+      drawer: const MainDrawer(),
       body: _page[selectedIndex]['widget'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,

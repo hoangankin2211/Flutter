@@ -3,10 +3,17 @@ import '../models/meal.dart';
 import '../widgets/ingredients_item.dart';
 import '../widgets/step_item.dart';
 
-class MealItemDetailScreen extends StatelessWidget {
+class MealItemDetailScreen extends StatefulWidget {
   static const routeName = '/meal_detail_screen';
 
   const MealItemDetailScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MealItemDetailScreen> createState() => _MealItemDetailScreenState();
+}
+
+class _MealItemDetailScreenState extends State<MealItemDetailScreen> {
+  bool? isMark = false;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +105,28 @@ class MealItemDetailScreen extends StatelessWidget {
                 ],
               ),
             )
+          ],
+        ),
+      ),
+      floatingActionButton: Container(
+        alignment: Alignment.bottomRight,
+        width: 112,
+        height: 50,
+        child: Row(
+          children: [
+            Checkbox(
+              onChanged: (value) {
+                setState(() {
+                  isMark = value;
+                });
+              },
+              value: isMark,
+              checkColor: Colors.red,
+            ),
+            FloatingActionButton(
+              onPressed: () => Navigator.of(context).pop(routeArgs.id),
+              child: const Icon(Icons.delete),
+            ),
           ],
         ),
       ),
