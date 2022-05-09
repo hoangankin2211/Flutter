@@ -13,11 +13,32 @@ class MealItemDetailScreen extends StatefulWidget {
 }
 
 class _MealItemDetailScreenState extends State<MealItemDetailScreen> {
-  bool? isMark = false;
+  bool isMark = false;
+  Color mark = Colors.white;
+
+  void markButton() {
+    setState(() {
+      isMark = !isMark;
+      if (isMark) {
+        mark = Colors.yellow;
+      } else {
+        mark = Colors.white;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final Meal routeArgs = ModalRoute.of(context)?.settings.arguments as Meal;
+
+    final iconButton = FloatingActionButton(
+      onPressed: markButton,
+      child: Icon(
+        Icons.favorite,
+        color: mark,
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -114,17 +135,17 @@ class _MealItemDetailScreenState extends State<MealItemDetailScreen> {
         height: 50,
         child: Row(
           children: [
-            Checkbox(
-              onChanged: (value) {
-                setState(() {
-                  isMark = value;
-                });
-              },
-              value: isMark,
-              checkColor: Colors.red,
+            FloatingActionButton(
+              onPressed: markButton,
+              heroTag: "btn1",
+              child: Icon(
+                Icons.favorite,
+                color: mark,
+              ),
             ),
             FloatingActionButton(
               onPressed: () => Navigator.of(context).pop(routeArgs.id),
+              heroTag: "btn2",
               child: const Icon(Icons.delete),
             ),
           ],
