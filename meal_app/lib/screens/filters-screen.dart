@@ -3,7 +3,11 @@ import '../widgets/main_drawer.dart';
 
 class FiltersScreen extends StatefulWidget {
   static const routeName = '/filters-screen';
-  const FiltersScreen({Key? key}) : super(key: key);
+  final Function(Map<String, bool>) selectFilter;
+  final Map<String, bool> currentlyFilters;
+  const FiltersScreen(
+      {Key? key, required this.selectFilter, required this.currentlyFilters})
+      : super(key: key);
 
   @override
   State<FiltersScreen> createState() => _FiltersScreenState();
@@ -14,6 +18,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   bool isVegan = false;
   bool isVegetarian = false;
   bool isLactoseFree = false;
+
   Widget _buildSwitchListTitle(
       String title, String subTitle, bool isSth, Function(bool) state) {
     return SwitchListTile(
@@ -24,7 +29,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
         subTitle,
         style: const TextStyle(color: Colors.black54),
       ),
+      activeTrackColor: Theme.of(context).primaryColor,
+      activeColor: Colors.orange[600],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isGlutenFree = widget.currentlyFilters['gluten'] as bool;
+    isVegan = widget.currentlyFilters['vegan'] as bool;
+    isVegetarian = widget.currentlyFilters['vegetarian'] as bool;
+    isLactoseFree = widget.currentlyFilters['lactose'] as bool;
   }
 
   @override
@@ -80,6 +96,20 @@ class _FiltersScreenState extends State<FiltersScreen> {
             ),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'flb1',
+        onPressed: () {
+          widget.selectFilter({
+            'gluten': isGlutenFree,
+            'vegan': isVegan,
+            'vegetarian': isVegetarian,
+            'lactose': isLactoseFree,
+          });
+          Navigator.of(context).pushReplacementNamed('/');
+        },
+        child: const Icon(Icons.save),
+        backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meal_app/dummy_data.dart';
 import './screens/categories_screen.dart';
 import './screens/categories_meal_screen.dart';
 import './screens/meal_item_detail_screen.dart';
@@ -10,8 +11,46 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> currentlyFilter = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false,
+  };
+  List<Meal> favoriteMeals = [];
+
+  void setFilters(Map<String, bool> selectedFilters) {
+    setState(() {
+      currentlyFilter = selectedFilters;
+    });
+  }
+
+  bool isExisting(Meal meal) {
+    return favoriteMeals.contains(meal);
+  }
+
+  void markFavorite(String mealID) {
+    final existingIndex =
+        favoriteMeals.indexWhere((element) => element.id == mealID);
+    if (existingIndex >= 0) {
+      setState(() {
+        favoriteMeals.removeAt(existingIndex);
+      });
+    } else {
+      setState(() {
+        favoriteMeals
+            .add(dummyMeal.firstWhere((element) => element.id == mealID));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +88,14 @@ class MyApp extends StatelessWidget {
       // home: const CategoriesScreen(),
       initialRoute: '/',
       routes: {
-        '/': (context) => const TabsScreen(),
+        '/': (context) => TabsScreen(favoriteMeals: favoriteMeals),
         CategoriesMealScreen.routeName: (context) =>
-            const CategoriesMealScreen(),
-        MealItemDetailScreen.routeName: (context) =>
-            const MealItemDetailScreen(),
+            CategoriesMealScreen(filters: currentlyFilter),
+        MealItemDetailScreen.routeName: (context) => MealItemDetailScreen(
+            markFavorite: markFavorite, isExisting: isExisting),
         CategoriesScreen.routeName: (context) => const CategoriesScreen(),
-        FiltersScreen.routeName: (context) => const FiltersScreen(),
+        FiltersScreen.routeName: (context) => FiltersScreen(
+            selectFilter: setFilters, currentlyFilters: currentlyFilter),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(

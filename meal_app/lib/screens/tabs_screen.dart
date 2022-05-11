@@ -5,25 +5,16 @@ import '../widgets/main_drawer.dart';
 import '../models/meal.dart';
 
 class TabsScreen extends StatefulWidget {
-  const TabsScreen({Key? key}) : super(key: key);
-
+  final List<Meal> favoriteMeals;
+  const TabsScreen({Key? key, required this.favoriteMeals}) : super(key: key);
   @override
   State<TabsScreen> createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Map<String, Object>> _page = [
-    {
-      'title': 'Categories',
-      'widget': const CategoriesScreen(),
-      'icon': const Icon(Icons.category),
-    },
-    {
-      'title': 'Favorites',
-      'widget': const FavoritesScreen(),
-      'icon': const Icon(Icons.star),
-    },
-  ];
+  List<Map<String, Object>> _page = [];
+
+  List<Meal> favorites = [];
 
   int selectedIndex = 0;
 
@@ -31,6 +22,23 @@ class _TabsScreenState extends State<TabsScreen> {
     setState(() {
       selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _page = [
+      {
+        'title': 'Categories',
+        'widget': const CategoriesScreen(),
+        'icon': const Icon(Icons.category),
+      },
+      {
+        'title': 'Favorites',
+        'widget': FavoritesScreen(favoriteMeals: widget.favoriteMeals),
+        'icon': const Icon(Icons.star),
+      },
+    ];
   }
 
   @override

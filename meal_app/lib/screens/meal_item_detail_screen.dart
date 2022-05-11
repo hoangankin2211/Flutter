@@ -5,39 +5,21 @@ import '../widgets/step_item.dart';
 
 class MealItemDetailScreen extends StatefulWidget {
   static const routeName = '/meal_detail_screen';
-
-  const MealItemDetailScreen({Key? key}) : super(key: key);
+  final Function(String) markFavorite;
+  final bool Function(Meal) isExisting;
+  const MealItemDetailScreen(
+      {Key? key, required this.isExisting, required this.markFavorite})
+      : super(key: key);
 
   @override
   State<MealItemDetailScreen> createState() => _MealItemDetailScreenState();
 }
 
 class _MealItemDetailScreenState extends State<MealItemDetailScreen> {
-  bool isMark = false;
-  Color mark = Colors.white;
-
-  void markButton() {
-    setState(() {
-      isMark = !isMark;
-      if (isMark) {
-        mark = Colors.yellow;
-      } else {
-        mark = Colors.white;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final Meal routeArgs = ModalRoute.of(context)?.settings.arguments as Meal;
-
-    final iconButton = FloatingActionButton(
-      onPressed: markButton,
-      child: Icon(
-        Icons.favorite,
-        color: mark,
-      ),
-    );
+    Color mark = widget.isExisting(routeArgs) ? Colors.red : Colors.white;
 
     return Scaffold(
       appBar: AppBar(
@@ -136,17 +118,19 @@ class _MealItemDetailScreenState extends State<MealItemDetailScreen> {
         child: Row(
           children: [
             FloatingActionButton(
-              onPressed: markButton,
+              onPressed: () => widget.markFavorite(routeArgs.id),
               heroTag: "btn1",
               child: Icon(
                 Icons.favorite,
                 color: mark,
               ),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
             FloatingActionButton(
               onPressed: () => Navigator.of(context).pop(routeArgs.id),
               heroTag: "btn2",
               child: const Icon(Icons.delete),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           ],
         ),

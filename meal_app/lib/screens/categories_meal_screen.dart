@@ -6,8 +6,9 @@ import '../models/meal.dart';
 
 class CategoriesMealScreen extends StatefulWidget {
   static const routeName = '/categories-meal-screen';
-
-  const CategoriesMealScreen({Key? key}) : super(key: key);
+  final Map<String, bool> filters;
+  const CategoriesMealScreen({Key? key, required this.filters})
+      : super(key: key);
 
   @override
   State<CategoriesMealScreen> createState() => _CategoriesMealScreenState();
@@ -28,9 +29,21 @@ class _CategoriesMealScreenState extends State<CategoriesMealScreen> {
     super.didChangeDependencies();
     if (!_isLoadedList) {
       category = ModalRoute.of(context)?.settings.arguments as Category;
-      meals = dummyMeal
-          .where((element) => element.categories.contains(category.id))
-          .toList();
+      meals = dummyMeal.where((element) {
+        if (element.isGlutenFree && widget.filters['gluten'] as bool) {
+          return false;
+        }
+        if (element.isLactoseFree && widget.filters['lactose'] as bool) {
+          return false;
+        }
+        if (element.isVegan && widget.filters['vegan'] as bool) {
+          return false;
+        }
+        if (element.isVegetarian && widget.filters['vegetarian'] as bool) {
+          return false;
+        }
+        return element.categories.contains(category.id);
+      }).toList();
       _isLoadedList = true;
     }
   }
