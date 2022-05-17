@@ -24,6 +24,7 @@ class StepItem extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: 4),
           Expanded(
             flex: 5,
             child: Text(

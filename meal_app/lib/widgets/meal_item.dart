@@ -95,57 +95,52 @@ class MealItem extends StatelessWidget {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.schedule,
-                              size: constraints.maxWidth * 0.3 / 4,
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              '${meal.duration} min',
-                              style: const TextStyle(fontSize: 17),
-                              textScaleFactor: constraints.maxWidth * 0.3 / 100,
-                            ),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: constraints.maxWidth * 0.3 / 4,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            '${meal.duration} min',
+                            style: const TextStyle(fontSize: 17),
+                            textScaleFactor: constraints.maxWidth * 0.3 / 100,
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.schedule,
-                              size: constraints.maxWidth * 0.3 / 4,
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              '$affordabilityText',
-                              style: const TextStyle(fontSize: 16),
-                              textScaleFactor: constraints.maxWidth * 0.3 / 100,
-                            ),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: constraints.maxWidth * 0.3 / 4,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            '$affordabilityText',
+                            style: const TextStyle(fontSize: 16),
+                            textScaleFactor: constraints.maxWidth * 0.3 / 100,
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(
-                              Icons.schedule,
-                              size: constraints.maxWidth * 0.3 / 4,
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              '$complexityText',
-                              style: const TextStyle(fontSize: 17),
-                              textScaleFactor: constraints.maxWidth * 0.3 / 100,
-                            ),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: constraints.maxWidth * 0.3 / 4,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            '$complexityText',
+                            style: const TextStyle(fontSize: 17),
+                            textScaleFactor: constraints.maxWidth * 0.3 / 100,
+                          ),
+                        ],
                       ),
                     ],
                   );
