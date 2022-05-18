@@ -3,6 +3,7 @@ import 'package:meal_app/widgets/meal_item.dart';
 import '../models/category.dart';
 import '../dummy_data.dart';
 import '../models/meal.dart';
+import '../widgets/add_meal_catalog.dart';
 
 class CategoriesMealScreen extends StatefulWidget {
   static const routeName = '/categories-meal-screen';
@@ -18,10 +19,19 @@ class _CategoriesMealScreenState extends State<CategoriesMealScreen> {
   late final Category category;
   late final List<Meal> meals;
   bool _isLoadedList = false;
+
   void _removeItem(String id) {
     setState(() {
       meals.removeWhere((element) => element.id == id);
     });
+  }
+
+  void _addMealCatalog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return const AddMealCatalog();
+        });
   }
 
   @override
@@ -59,14 +69,32 @@ class _CategoriesMealScreenState extends State<CategoriesMealScreen> {
         ),
       ),
       body: Center(
-        child: ListView.builder(
-          itemBuilder: (ctx, index) {
-            return MealItem(
-              meal: meals[index],
-              removeItem: _removeItem,
-            );
-          },
-          itemCount: meals.length,
+        child: meals.isEmpty
+            ? Container(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                    'There aren\'t any meal yey !!!\nAdd meal please !!!',
+                    style: Theme.of(context).textTheme.headline2),
+              )
+            : ListView.builder(
+                itemBuilder: (ctx, index) {
+                  return MealItem(
+                    meal: meals[index],
+                    removeItem: _removeItem,
+                  );
+                },
+                itemCount: meals.length,
+              ),
+      ),
+      floatingActionButton: Container(
+        height: 50,
+        margin: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton(
+          onPressed: () => _addMealCatalog(context),
+          child: const Icon(Icons.add),
+          backgroundColor: Theme.of(context).primaryColor,
+          splashColor: Colors.orange,
         ),
       ),
     );

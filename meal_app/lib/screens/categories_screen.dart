@@ -13,13 +13,13 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  final List<Category> listCategories = dummyCategoriesName;
+  List<Category> listCategories = dummyCategoriesName.toList();
 
   void _addCategories(BuildContext context) {
     showDialog(
         context: context,
         builder: (_) {
-          return AddCategoriesDialog();
+          return AddCategoriesDialog(addCategory: _addToListCategories);
         });
   }
 
